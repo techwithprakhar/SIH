@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classrooms</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <h2>Classrooms</h2>
+    <form method="POST" action="/classrooms">
+        <input type="text" name="name" placeholder="Classroom Name" required>
+        <input type="number" name="capacity" placeholder="Capacity" required>
+        <select name="type">
+            <option value="classroom">Classroom</option>
+            <option value="laboratory">Laboratory</option>
+        </select>
+        <input type="text" name="department" placeholder="Department">
+        <input type="text" name="shift" placeholder="Shift">
+        <button type="submit">Add Classroom</button>
+    </form>
+    <br>
+    <table border="1" cellpadding="8" style="margin:auto;">
+        <tr>
+            <th>Name</th>
+            <th>Capacity</th>
+            <th>Type</th>
+            <th>Department</th>
+            <th>Shift</th>
+        </tr>
+        <% classrooms.forEach(function(cls) { %>
+        <tr>
+            <td><%= cls.name %></td>
+            <td><%= cls.capacity %></td>
+            <td><%= cls.type %></td>
+            <td><%= cls.department %></td>
+            <td><%= cls.shift %></td>
+            <td>
+                <form method="POST" action="/classrooms/delete" style="display:inline;">
+                    <input type="hidden" name="id" value="<%= cls._id %>">
+                    <button type="submit" onclick="return confirm('Delete this classroom?')">Delete</button>
+                </form>
+            </td>
+        </tr>
+        <% }); %>
+    </table>
+    <br>
+    <a href="/dashboard">Back to Dashboard</a>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timetable - Class Scheduling Platform</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <h2>Generate Timetable</h2>
+    <form method="POST" action="/timetable" style="margin-bottom:20px; display:inline-block;">
+        <label for="batchId">Select Batch:</label>
+        <select name="batchId" id="batchId" required>
+            <option value="">--Select Batch--</option>
+            <% batches.forEach(function(batch) { %>
+                <option value="<%= batch._id %>"
+                    <% if (typeof selectedBatch !== 'undefined' && selectedBatch && selectedBatch._id && selectedBatch._id.toString() === batch._id.toString()) { %>selected<% } %>
+                ><%= batch.name %></option>
+            <% }); %>
+        </select>
+        <button type="submit">Generate</button>
+    </form>
+    <form method="POST" action="/timetable/all" style="display:inline-block; margin-left:20px;">
+        <button type="submit">Generate All Batches (No Clash)</button>
+    </form>
+
+    <% if (timetable && timetable.length > 0) { %>
+    <h3>Timetable for <%= selectedBatch ? selectedBatch.name : '' %></h3>
+    <table border="1" cellpadding="8" style="margin:auto;">
+        <tr>
+            <th>Day</th>
+            <% let periods = ['Period 1','Period 2','Period 3','Period 4','Period 5','Period 6']; %>
+            <% periods.forEach(function(period) { %>
+                <th><%= period %></th>
+            <% }); %>
+        </tr>
+        <% let days = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']; %>
+        <% days.forEach(function(day) { %>
+            <tr>
+                <td><%= day %></td>
+                <% periods.forEach(function(period) { %>
+                    <% let slot = timetable.find(function(s) { return s.day === day && s.period === period; }); %>
+                    <td>
+                        <% if (slot) { %>
+                            <b><%= slot.subject %></b><br>
+                            <small>Teacher: <%= slot.faculty %></small><br>
+                            <small>Room: <%= slot.classroom %></small>
+                        <% } else { %>
+                            -
+                        <% } %>
+                    </td>
+                <% }); %>
+            </tr>
+        <% }); %>
+    </table>
+    <br>
+    <form method="POST" action="/timetable/review">
+        <button type="submit">Submit for Review</button>
+    </form>
+    <% } %>
+    <br>
+    <a href="/dashboard">Back to Dashboard</a>
+</body>
+</html>

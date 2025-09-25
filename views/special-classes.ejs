@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Special Classes</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <h2>Special Classes</h2>
+    <table border="1" cellpadding="8" style="margin:auto;">
+        <tr>
+            <th>Name</th>
+            <th>Subject</th>
+            <th>Faculty</th>
+            <th>Batch</th>
+            <th>Classroom</th>
+            <th>Day</th>
+            <th>Start Time</th>
+            <th>End Time</th>
+        </tr>
+        <% specialClasses.forEach(function(cls) { %>
+        <tr>
+            <td><%= cls.name %></td>
+            <td><%= cls.subject %></td>
+            <td><%= cls.faculty %></td>
+            <td><%= cls.batch %></td>
+            <td><%= cls.classroom %></td>
+            <td><%= cls.day %></td>
+            <td><%= cls.startTime %></td>
+            <td><%= cls.endTime %></td>
+            <td>
+                <form method="POST" action="/special-classes/delete" style="display:inline;">
+                    <input type="hidden" name="id" value="<%= cls._id %>">
+                    <button type="submit" onclick="return confirm('Delete this special class?')">Delete</button>
+                </form>
+            </td>
+        </tr>
+        <% }); %>
+    </table>
+    <br>
+    <a href="/dashboard">Back to Dashboard</a>
+</body>
+</html>

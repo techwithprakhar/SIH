@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Constraints</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <h2>Constraints</h2>
+    <form method="POST" action="/constraints">
+        <input type="text" name="type" placeholder="Type (e.g. faculty_unavailable)" required>
+        <input type="text" name="details" placeholder="Details">
+        <input type="text" name="day" placeholder="Day">
+        <input type="text" name="startTime" placeholder="Start Time">
+        <input type="text" name="endTime" placeholder="End Time">
+        <button type="submit">Add Constraint</button>
+    </form>
+    <br>
+    <table border="1" cellpadding="8" style="margin:auto;">
+        <tr>
+            <th>Type</th>
+            <th>Details</th>
+            <th>Day</th>
+            <th>Start Time</th>
+            <th>End Time</th>
+        </tr>
+        <% constraints.forEach(function(constraint) { %>
+        <tr>
+            <td><%= constraint.type %></td>
+            <td><%= constraint.details %></td>
+            <td><%= constraint.day %></td>
+            <td><%= constraint.startTime %></td>
+            <td><%= constraint.endTime %></td>
+            <td>
+                <form method="POST" action="/constraints/delete" style="display:inline;">
+                    <input type="hidden" name="id" value="<%= constraint._id %>">
+                    <button type="submit" onclick="return confirm('Delete this constraint?')">Delete</button>
+                </form>
+            </td>
+        </tr>
+        <% }); %>
+    </table>
+    <br>
+    <a href="/dashboard">Back to Dashboard</a>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Batches Timetables</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <h2>All Batches Timetables</h2>
+    <% batches.forEach(function(batch) { %>
+        <h3>Batch: <%= batch.name %></h3>
+        <table border="1" cellpadding="8" style="margin-bottom:30px;">
+            <tr>
+                <th>Day</th>
+                <% periods.forEach(function(period) { %>
+                    <th><%= period %></th>
+                <% }); %>
+            </tr>
+            <% days.forEach(function(day) { %>
+                <tr>
+                    <td><%= day %></td>
+                    <% periods.forEach(function(period) { %>
+                        <% let slot = batchTimetables[batch._id].find(function(s) { return s.day === day && s.period === period; }); %>
+                        <td>
+                            <% if (slot) { %>
+                                <b><%= slot.subject %></b><br>
+                                <small>Teacher: <%= slot.faculty %></small><br>
+                                <small>Room: <%= slot.classroom %></small>
+                            <% } else { %>
+                                -
+                            <% } %>
+                        </td>
+                    <% }); %>
+                </tr>
+            <% }); %>
+        </table>
+    <% }); %>
+    <a href="/dashboard">Back to Dashboard</a>
+</body>
+</html>

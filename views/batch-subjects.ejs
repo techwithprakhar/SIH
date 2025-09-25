@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assign Subjects to Batch</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <h2>Assign Subjects to Batch</h2>
+    <form method="POST" action="/batch-subjects">
+        <label for="batch">Batch:</label>
+        <select name="batch" id="batch" required>
+            <% batches.forEach(function(batch) { %>
+                <option value="<%= batch._id %>"><%= batch.name %></option>
+            <% }); %>
+        </select>
+        <br><br>
+        <label for="subjects">Subjects:</label>
+        <select name="subjects" id="subjects" multiple required>
+            <% subjects.forEach(function(subject) { %>
+                <option value="<%= subject._id %>"><%= subject.name %></option>
+            <% }); %>
+        </select>
+        <br><br>
+        <button type="submit">Assign Subjects</button>
+    </form>
+    <br>
+    <a href="/dashboard">Back to Dashboard</a>
+</body>
+</html>

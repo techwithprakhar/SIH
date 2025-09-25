@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Class Scheduling Platform</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <h2>Dashboard</h2>
+    <nav>
+        <a href="/classrooms">Classrooms</a> |
+        <a href="/subjects">Subjects</a> |
+        <a href="/faculty">Faculty</a> |
+        <a href="/batches">Batches</a> |
+        <a href="/constraints">Constraints</a> |
+        <a href="/special-classes">Special Classes</a> |
+        <a href="/timetable">Timetable</a> |
+        <a href="/logout">Logout</a>
+    </nav>
+    <p>Welcome, <%= user ? user.name : 'User' %>!</p>
+</body>
+</html>

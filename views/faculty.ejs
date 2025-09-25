@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Faculty</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <h2>Faculty</h2>
+    <form method="POST" action="/faculty">
+        <input type="text" name="name" placeholder="Faculty Name" required>
+        <input type="email" name="email" placeholder="Email" required>
+        <input type="text" name="department" placeholder="Department">
+        <input type="number" name="maxLoadPerWeek" placeholder="Max Load/Week">
+        <input type="number" name="averageLeavesPerMonth" placeholder="Avg Leaves/Month">
+        <br><br>
+        <label>Assign Subjects and Semesters:</label>
+        <div id="subject-semester-list">
+            <% subjects.forEach(function(subject, idx) { %>
+                <div style="margin-bottom:8px;">
+                    <input type="checkbox" name="subjects" value="<%= subject._id %>" id="sub<%= idx %>" onchange="document.getElementById('sem<%= idx %>').disabled = !this.checked;">
+                    <label for="sub<%= idx %>"><%= subject.name %> (Sem <%= subject.semester %>)</label>
+                    <input type="number" name="semesterFor_<%= subject._id %>" id="sem<%= idx %>" placeholder="Semester" min="1" style="width:80px;" disabled>
+                </div>
+            <% }); %>
+        </div>
+        <button type="submit">Add Faculty</button>
+    </form>
+    <br>
+    <table border="1" cellpadding="8" style="margin:auto;">
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Department</th>
+            <th>Max Load/Week</th>
+            <th>Avg Leaves/Month</th>
+            <th>Subjects</th>
+            <th>Semesters Taught</th>
+        </tr>
+        <% faculty.forEach(function(fac) { %>
+        <tr>
+            <td><%= fac.name %></td>
+            <td><%= fac.email %></td>
+            <td><%= fac.department %></td>
+            <td><%= fac.maxLoadPerWeek %></td>
+            <td><%= fac.averageLeavesPerMonth %></td>
+            <td>
+                <% if (fac.subjects && fac.subjects.length) { %>
+                    <%= fac.subjects.map(function(s) { return s.name || s; }).join(', ') %>
+                <% } else { %>
+                    None
+                <% } %>
+            </td>
+            <td>
+                <form method="POST" action="/faculty/delete" style="display:inline;">
+                    <input type="hidden" name="id" value="<%= fac._id %>">
+                    <button type="submit" onclick="return confirm('Delete this faculty?')">Delete</button>
+                </form>
+            </td>
+            <td>
+                <% if (fac.semestersTaught && fac.semestersTaught.length) { %>
+                    <%= fac.semestersTaught.map(function(st) {
+                        if (st.subject && typeof st.subject === 'object' && st.subject.name) {
+                            return st.subject.name + ': ' + st.semester;
+                        } else if (st.subject) {
+                            return st.subject + ': ' + st.semester;
+                        } else {
+                            return 'Unknown Subject: ' + st.semester;
+                        }
+                    }).join(', ') %>
+                <% } else { %>
+                    None
+                <% } %>
+            </td>
+            <td>
+                <form method="POST" action="/faculty/delete" style="display:inline;">
+                    <input type="hidden" name="id" value="<%= fac._id %>">
+                    <button type="submit" onclick="return confirm('Delete this faculty?')">Delete</button>
+                </form>
+            </td>
+        </tr>
+        <% }); %>
+    </table>
+    <br>
+    <a href="/dashboard">Back to Dashboard</a>
+</body>
+</html>

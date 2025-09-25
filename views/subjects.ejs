@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subjects</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <h2>Subjects</h2>
+    <form method="POST" action="/subjects">
+        <input type="text" name="name" placeholder="Subject Name" required>
+        <input type="text" name="code" placeholder="Subject Code" required>
+        <input type="text" name="department" placeholder="Department">
+        <input type="number" name="semester" placeholder="Semester">
+        <label><input type="checkbox" name="isElective"> Elective</label>
+        <input type="number" name="requiredClassesPerWeek" placeholder="Classes/Week" required>
+        <input type="number" name="maxClassesPerDay" placeholder="Max/Day">
+        <button type="submit">Add Subject</button>
+    </form>
+    <br>
+    <table border="1" cellpadding="8" style="margin:auto;">
+        <tr>
+            <th>Name</th>
+            <th>Code</th>
+            <th>Department</th>
+            <th>Semester</th>
+            <th>Elective</th>
+            <th>Classes/Week</th>
+            <th>Max/Day</th>
+        </tr>
+        <% subjects.forEach(function(sub) { %>
+        <tr>
+            <td><%= sub.name %></td>
+            <td><%= sub.code %></td>
+            <td><%= sub.department %></td>
+            <td><%= sub.semester %></td>
+            <td><%= sub.isElective ? 'Yes' : 'No' %></td>
+            <td><%= sub.requiredClassesPerWeek %></td>
+            <td><%= sub.maxClassesPerDay %></td>
+            <td>
+                <form method="POST" action="/subjects/delete" style="display:inline;">
+                    <input type="hidden" name="id" value="<%= sub._id %>">
+                    <button type="submit" onclick="return confirm('Delete this subject?')">Delete</button>
+                </form>
+            </td>
+        </tr>
+        <% }); %>
+    </table>
+    <br>
+    <a href="/dashboard">Back to Dashboard</a>
+</body>
+</html>
