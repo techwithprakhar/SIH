@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>College Scheduling System</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Toast Notifications Container -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Loading Spinner -->
+    <div id="loading-spinner" class="loading-spinner hidden">
+        <div class="spinner"></div>
+        <p>Loading...</p>
+    </div>
+
+    <!-- Login Page -->
+    <div id="login-page" class="login-page">
+        <div class="login-container">
+            <div class="login-header">
+                <h1>College Scheduling System</h1>
+                <p>Intelligent Timetable Management</p>
+            </div>
+            <form id="login-form" class="login-form">
+                <div class="form-group">
+                    <label class="form-label">Username</label>
+                    <input type="text" id="username" name="username" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input type="password" id="password" name="password" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Role</label>
+                    <select id="role" name="role" class="form-control" required>
+                        <option value="">Select Role</option>
+                        <option value="admin">Administrator</option>
+                        <option value="faculty">Faculty</option>
+                        <option value="student">Student</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn--primary btn--full-width">Login</button>
+            </form>
+            <div class="demo-credentials">
+                <h4>Demo Credentials:</h4>
+                <p><strong>Admin:</strong> admin / admin123</p>
+                <p><strong>Faculty:</strong> faculty1 / faculty123</p>
+                <p><strong>Student:</strong> student1 / student123</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Application -->
+    <div id="app" class="app hidden">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <button id="sidebar-toggle" class="btn btn--secondary btn--sm hamburger-btn">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h2 id="page-title">Dashboard</h2>
+            </div>
+            <div class="header-right">
+                <!-- Notification Bell -->
+                <button id="notification-btn" class="btn btn--secondary btn--sm notification-btn">
+                    <i class="fas fa-bell"></i>
+                    <span id="notification-count" class="notification-count hidden">0</span>
+                </button>
+                
+                <!-- Profile Menu -->
+                <div class="profile-menu">
+                    <button id="profile-menu-btn" class="btn btn--secondary btn--sm profile-btn">
+                        <img id="user-avatar" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=32&h=32&fit=crop&crop=face" alt="Avatar" class="user-avatar">
+                        <span id="user-name">User</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div id="profile-dropdown" class="profile-dropdown hidden">
+                        <div class="profile-info">
+                            <img id="dropdown-avatar" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=48&h=48&fit=crop&crop=face" alt="Avatar" class="dropdown-avatar">
+                            <div class="profile-details">
+                                <div class="profile-name" id="dropdown-name">User Name</div>
+                                <div class="profile-role" id="dropdown-role">Role</div>
+                            </div>
+                        </div>
+                        <hr class="dropdown-separator">
+                        <a href="#" id="edit-profile-link" class="dropdown-link">
+                            <i class="fas fa-user-edit"></i> Edit Profile
+                        </a>
+                        <div class="theme-toggle-container">
+                            <span class="theme-label">Dark Mode</span>
+                            <button id="theme-toggle" class="theme-toggle">
+                                <div class="theme-toggle-track">
+                                    <div class="theme-toggle-thumb"></div>
+                                </div>
+                                <i class="fas fa-moon theme-icon"></i>
+                            </button>
+                        </div>
+                        <hr class="dropdown-separator">
+                        <a href="#" id="logout-link" class="dropdown-link logout-link">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Enhanced Sidebar -->
+        <aside id="sidebar" class="sidebar sidebar-hidden">
+            <div class="sidebar-header">
+                <h3>Navigation</h3>
+                <button id="sidebar-close" class="sidebar-close-btn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <nav class="sidebar-nav">
+                <!-- Admin Navigation -->
+                <div id="admin-nav" class="nav-section hidden">
+                    <a href="#dashboard" class="nav-link active" data-page="dashboard">
+                        <i class="fas fa-tachometer-alt"></i> Dashboard
+                    </a>
+                    <a href="#faculty-management" class="nav-link" data-page="faculty-management">
+                        <i class="fas fa-users"></i> Faculty Management
+                    </a>
+                    <a href="#subject-management" class="nav-link" data-page="subject-management">
+                        <i class="fas fa-book"></i> Subject Management
+                    </a>
+                    <a href="#classroom-management" class="nav-link" data-page="classroom-management">
+                        <i class="fas fa-door-open"></i> Classroom Management
+                    </a>
+                    <a href="#batch-management" class="nav-link" data-page="batch-management">
+                        <i class="fas fa-graduation-cap"></i> Batch Management
+                    </a>
+                    <a href="#constraints" class="nav-link" data-page="constraints">
+                        <i class="fas fa-cogs"></i> Scheduling Constraints
+                    </a>
+                    <a href="#timetable-generator" class="nav-link" data-page="timetable-generator">
+                        <i class="fas fa-calendar-alt"></i> Generate Timetable
+                    </a>
+                    <a href="#reports" class="nav-link" data-page="reports">
+                        <i class="fas fa-chart-bar"></i> Reports & Analytics
+                    </a>
+                    <a href="#notifications" class="nav-link" data-page="notifications">
+                        <i class="fas fa-bell"></i> Notifications
+                    </a>
+                    <a href="#feedback-management" class="nav-link" data-page="feedback-management">
+                        <i class="fas fa-comments"></i> Feedback Management
+                    </a>
+                </div>
+
+                <!-- Faculty Navigation -->
+                <div id="faculty-nav" class="nav-section hidden">
+                    <a href="#dashboard" class="nav-link active" data-page="dashboard">
+                        <i class="fas fa-tachometer-alt"></i> Dashboard
+                    </a>
+                    <a href="#my-schedule" class="nav-link" data-page="my-schedule">
+                        <i class="fas fa-calendar"></i> My Schedule
+                    </a>
+                    <a href="#calendar-view" class="nav-link" data-page="calendar-view">
+                        <i class="fas fa-calendar-day"></i> Calendar View
+                    </a>
+                    <a href="#workload" class="nav-link" data-page="workload">
+                        <i class="fas fa-tasks"></i> Workload Management
+                    </a>
+                    <a href="#availability" class="nav-link" data-page="availability">
+                        <i class="fas fa-clock"></i> Availability Settings
+                    </a>
+                    <a href="#change-requests" class="nav-link" data-page="change-requests">
+                        <i class="fas fa-exchange-alt"></i> Class Requests
+                    </a>
+                </div>
+
+                <!-- Student Navigation -->
+                <div id="student-nav" class="nav-section hidden">
+                    <a href="#dashboard" class="nav-link active" data-page="dashboard">
+                        <i class="fas fa-tachometer-alt"></i> Dashboard
+                    </a>
+                    <a href="#my-timetable" class="nav-link" data-page="my-timetable">
+                        <i class="fas fa-calendar"></i> My Timetable
+                    </a>
+                    <a href="#electives" class="nav-link" data-page="electives">
+                        <i class="fas fa-list-alt"></i> Elective Preferences
+                    </a>
+                    <a href="#feedback" class="nav-link" data-page="feedback">
+                        <i class="fas fa-comment"></i> Submit Feedback
+                    </a>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Sidebar Overlay -->
+        <div id="sidebar-overlay" class="sidebar-overlay hidden"></div>
+
+        <!-- Main Content -->
+        <main id="main-content" class="main-content">
+            <!-- Dynamic content will be loaded here -->
+        </main>
+    </div>
+
+    <!-- Modal Container -->
+    <div id="modal-container" class="modal-container"></div>
+
+    <!-- Profile Edit Modal Template -->
+    <template id="profile-edit-template">
+        <div class="modal-backdrop">
+            <div class="modal-content modal-content--large">
+                <div class="modal-header">
+                    <h3 class="modal-title">Edit Profile</h3>
+                    <button class="modal-close">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="profile-edit-form" class="profile-edit-form">
+                        <div class="profile-photo-section">
+                            <div class="current-photo">
+                                <img id="profile-preview" src="" alt="Profile Photo" class="profile-photo-preview">
+                            </div>
+                            <div class="photo-actions">
+                                <input type="file" id="photo-upload" accept="image/*" class="hidden">
+                                <button type="button" class="btn btn--secondary" onclick="document.getElementById('photo-upload').click()">
+                                    <i class="fas fa-camera"></i> Change Photo
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Full Name</label>
+                                <input type="text" name="name" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Email</label>
+                                <input type="email" name="email" class="form-control" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Phone Number</label>
+                                <input type="tel" name="phone" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Department</label>
+                                <input type="text" name="department" class="form-control" readonly>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Address</label>
+                            <textarea name="address" class="form-control" rows="2"></textarea>
+                        </div>
+                        
+                        <div class="password-section">
+                            <h4>Change Password</h4>
+                            <div class="form-group">
+                                <label class="form-label">Current Password</label>
+                                <input type="password" name="currentPassword" class="form-control">
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label">New Password</label>
+                                    <input type="password" name="newPassword" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Confirm New Password</label>
+                                    <input type="password" name="confirmPassword" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn--secondary cancel-btn">Cancel</button>
+                    <button type="submit" class="btn btn--primary" onclick="app.saveProfileChanges()">Save Changes</button>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <!-- Enhanced Elective Preferences Modal -->
+    <template id="elective-preferences-template">
+        <div class="modal-backdrop">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Manage Elective Preferences</h3>
+                    <button class="modal-close">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="electives-form" class="electives-form">
+                        <div class="selected-electives">
+                            <h4>Selected Electives</h4>
+                            <div id="selected-list" class="selected-electives-list">
+                                <!-- Selected electives will be populated here -->
+                            </div>
+                        </div>
+                        
+                        <div class="available-electives">
+                            <h4>Available Electives</h4>
+                            <div class="electives-grid" id="available-electives">
+                                <!-- Available electives will be populated here -->
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Additional Comments</label>
+                            <textarea name="comments" class="form-control" rows="3" placeholder="Any specific preferences or requirements..."></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn--secondary cancel-btn">Cancel</button>
+                    <button type="submit" class="btn btn--primary" onclick="app.saveElectivePreferences()">Save Preferences</button>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <!-- Class Request Modal -->
+    <template id="class-request-template">
+        <div class="modal-backdrop">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Submit Class Request</h3>
+                    <button class="modal-close">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="class-request-form">
+                        <div class="form-group">
+                            <label class="form-label">Request Type</label>
+                            <select name="requestType" class="form-control" required>
+                                <option value="">Select type</option>
+                                <option value="add_class">Add Extra Class</option>
+                                <option value="cancel_class">Cancel Class</option>
+                                <option value="reschedule_class">Reschedule Class</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Subject</label>
+                            <select name="subject" class="form-control" required>
+                                <option value="">Select subject</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Date</label>
+                            <input type="date" name="date" class="form-control" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Time Slot</label>
+                            <select name="timeSlot" class="form-control" required>
+                                <option value="">Select time slot</option>
+                                <option value="08:00-09:00">08:00-09:00</option>
+                                <option value="09:00-10:00">09:00-10:00</option>
+                                <option value="10:00-11:00">10:00-11:00</option>
+                                <option value="11:15-12:15">11:15-12:15</option>
+                                <option value="12:15-13:15">12:15-13:15</option>
+                                <option value="14:15-15:15">14:15-15:15</option>
+                                <option value="15:15-16:15">15:15-16:15</option>
+                                <option value="16:15-17:15">16:15-17:15</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Room (optional)</label>
+                            <select name="room" class="form-control">
+                                <option value="">Select room</option>
+                                <option value="Room A101">Room A101</option>
+                                <option value="Lab B201">Lab B201</option>
+                                <option value="Room C301">Room C301</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Reason</label>
+                            <textarea name="reason" class="form-control" rows="3" placeholder="Provide reason for this request..." required></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn--secondary cancel-btn">Cancel</button>
+                    <button type="submit" class="btn btn--primary" onclick="app.submitClassRequest()">Submit Request</button>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <!-- Workload Hours Modal -->
+    <template id="workload-hours-template">
+        <div class="modal-backdrop">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Edit Workload Hours</h3>
+                    <button class="modal-close">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="workload-hours-form">
+                        <div id="subject-hours-list" class="subject-hours-list">
+                            <!-- Subject hours will be populated here -->
+                        </div>
+                        
+                        <div class="total-hours-display">
+                            <div class="total-hours">
+                                <span>Total Hours: </span>
+                                <span id="total-hours-value" class="total-hours-value">0</span>
+                                <span> / </span>
+                                <span id="max-hours-value" class="max-hours-value">18</span>
+                                <span> hours per week</span>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn--secondary cancel-btn">Cancel</button>
+                    <button type="submit" class="btn btn--primary" onclick="app.saveWorkloadHours()">Save Changes</button>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <script src="app.js"></script>
+</body>
+</html>
