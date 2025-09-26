@@ -17,7 +17,7 @@
         <br>
         <label for="classroom">Assign Classroom:</label>
         <select name="classroom" id="classroom">
-            <option value="">--Select Classroom--</option>
+            <option value="">--Select the Classroom--</option>
             <% classrooms.forEach(function(room) { %>
                 <option value="<%= room._id %>"><%= room.name %> (<%= room.department %>, <%= room.shift %>)</option>
             <% }); %>
